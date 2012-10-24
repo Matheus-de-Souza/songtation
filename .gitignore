@@ -16,3 +16,7 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+# VIM
+*.sw[a-z]
+tags
