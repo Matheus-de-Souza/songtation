@@ -95,6 +95,22 @@ class TestSlideCreator < Test::Unit::TestCase
 	assert_equal(1, @slides[1].content.count)
   end
 
+  def test_get_html_values
+	text = "\r\n\r\n#titulo1\r\ncontent\r\ncontent2\r\n#titulo2\r\ncontent"
+
+	slideMaker = SlideMaker.new
+
+	@slides.concat( slideMaker.parse(text) )
+
+	assert_equal(2, @slides.count)
+
+	assert_equal("<h2>titulo1</h2>", @slides[0].getHtmlTitle)
+	assert_equal("<h2>titulo2</h2>", @slides[1].getHtmlTitle)
+
+	assert_equal("<p>content<br />content2</p>", @slides[0].getHtmlContent)
+	assert_equal("<p>content</p>", @slides[1].getHtmlContent)
+  end
+
   #def setup
     #@calc = Calculator.new
   #end
