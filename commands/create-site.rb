@@ -17,6 +17,10 @@ class Slide
 		end
 		return "<p>" + result + "</p>"
 	end
+
+	def getFullHtml
+		return "<section>" + getHtmlTitle() + getHtmlContent() + "</section>"
+	end
 end
 
 class SlideMaker

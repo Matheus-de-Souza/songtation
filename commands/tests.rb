@@ -6,10 +6,12 @@ class TestSlideCreator < Test::Unit::TestCase
 
   def setup
     @slides = Array.new
+	@slideMaker = SlideMaker.new
   end
 
   def teardown
 	  @slides = nil
+	  @slideMaker = nil
   end
 
   def test_init_with_zero_slides
@@ -47,9 +49,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_parse_titles
 	text = "#titulo1\r\n\r\n\r\n#titulo2"
 
-	slideMaker = SlideMaker.new
-
-	@slides.concat( slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parse(text) )
 
 	assert_equal(2, @slides.count, @slides)
 	assert_equal("titulo1", @slides.first.title)
@@ -62,9 +62,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_parse_titles_more_titles
 	text = "\r\n\r\n#titulo1\r\n\r\n\r\n#titulo2\r\n#titulo3\r\n\r\n\r\n#titulo4"
 
-	slideMaker = SlideMaker.new
-
-	@slides.concat( slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parse(text) )
 
 	assert_equal(4, @slides.count)
 
@@ -82,9 +80,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_parse_titles_and_content
 	text = "\r\n\r\n#titulo1\r\ncontent\r\n content\r\n#titulo2\r\ncontent"
 
-	slideMaker = SlideMaker.new
-
-	@slides.concat( slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parse(text) )
 
 	assert_equal(2, @slides.count)
 
@@ -98,9 +94,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_get_html_values
 	text = "\r\n\r\n#titulo1\r\ncontent\r\ncontent2\r\n#titulo2\r\ncontent"
 
-	slideMaker = SlideMaker.new
-
-	@slides.concat( slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parse(text) )
 
 	assert_equal(2, @slides.count)
 
@@ -109,6 +103,14 @@ class TestSlideCreator < Test::Unit::TestCase
 
 	assert_equal("<p>content<br />content2</p>", @slides[0].getHtmlContent)
 	assert_equal("<p>content</p>", @slides[1].getHtmlContent)
+
+	assert_equal("<section><h2>titulo1</h2><p>content<br />content2</p></section>", @slides[0].getFullHtml)
+	assert_equal("<section><h2>titulo2</h2><p>content</p></section>", @slides[1].getFullHtml)
+  end
+
+  def test_read_text_from_files
+	#f = File.open("../song-test.txt", "r");
+	#f.lines
   end
 
   #def setup
