@@ -24,18 +24,29 @@ class Slide
 end
 
 class SlideMaker
-	def parse(text)
+	def parseString(text)
 		@slides = Array.new
-		text.lines("\r\n") do |line|
+
+		if(text.include?("\r\n"))
+			text.gsub!("\r","")
+		elsif(text.include?("\r"))
+			text.gsub!("\r","\n")
+		end
+
+		text.lines("\n") do |line|
 			if(line.match(/^#[0-9A-Za-z]+/))
-				title = line.sub("\r\n","")
+				title = line.sub("\n","")
 				title = title[1..-1]
 				@slides.push(Slide.new(title))
 			elsif(@slides.count != 0)
-				line = line.sub("\r\n","")
+				line = line.sub("\n","")
 				@slides.last.content.push(line)
 			end
 		end
 		return @slides
+	end
+	def parseFile(filepath)
+		f = File.open(filepath, "r")
+		return parseString(f.read)
 	end
 end

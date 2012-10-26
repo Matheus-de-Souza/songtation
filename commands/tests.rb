@@ -49,7 +49,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_parse_titles
 	text = "#titulo1\r\n\r\n\r\n#titulo2"
 
-	@slides.concat( @slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parseString(text) )
 
 	assert_equal(2, @slides.count, @slides)
 	assert_equal("titulo1", @slides.first.title)
@@ -62,7 +62,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_parse_titles_more_titles
 	text = "\r\n\r\n#titulo1\r\n\r\n\r\n#titulo2\r\n#titulo3\r\n\r\n\r\n#titulo4"
 
-	@slides.concat( @slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parseString(text) )
 
 	assert_equal(4, @slides.count)
 
@@ -80,7 +80,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_parse_titles_and_content
 	text = "\r\n\r\n#titulo1\r\ncontent\r\n content\r\n#titulo2\r\ncontent"
 
-	@slides.concat( @slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parseString(text) )
 
 	assert_equal(2, @slides.count)
 
@@ -94,7 +94,7 @@ class TestSlideCreator < Test::Unit::TestCase
   def test_get_html_values
 	text = "\r\n\r\n#titulo1\r\ncontent\r\ncontent2\r\n#titulo2\r\ncontent"
 
-	@slides.concat( @slideMaker.parse(text) )
+	@slides.concat( @slideMaker.parseString(text) )
 
 	assert_equal(2, @slides.count)
 
@@ -109,18 +109,10 @@ class TestSlideCreator < Test::Unit::TestCase
   end
 
   def test_read_text_from_files
-	#f = File.open("../song-test.txt", "r");
-	#f.lines
-  end
+	@slides = @slideMaker.parseFile("../song-test.txt");
 
-  #def setup
-    #@calc = Calculator.new
-  #end
-  #def teardown
-	  #@calc = nil
-  #end
-  #def test_sum
-	  #assert_equal(2, @calc.sum(1, 1), "1 + 1 = 2")
-  #end
+	assert_equal("<section><h2>titulo</h2><p><br />letra bonita<br /><br />letra muito bonita<br /></p></section>", @slides[0].getFullHtml)
+	assert_equal("<section><h2>titulo mais legal</h2><p><br />letra show<br />mais letra show</p></section>", @slides[1].getFullHtml)
+  end
 end
 
